@@ -1,0 +1,36 @@
+name: 🚀 CI Pipeline   # اسم الـ pipeline كيبان فـ GitHub
+
+on:
+  push:               # كلما شي حد دز push
+    branches:
+      - master          # غير للفرع main
+  pull_request:       # ولا ملي كيتفتح PR على main
+    branches:
+      - master
+
+jobs:
+  build-and-test:     # اسم الـ job
+    runs-on: ubuntu-latest   # السيرفر اللي غادي يخدم فيه job (Linux)
+
+    steps:
+      - name: 📥 Checkout source code
+        uses: actions/checkout@v3
+        # هادي باش نجيبو الكود من repository
+
+      - name: ⚙️ Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'             # نحدد version ديال Java
+          distribution: 'temurin'        # distribution بحال adopt, temurin...
+
+      - name: 📦 Build project with Maven
+        run: mvn clean install
+        # نبني المشروع ديالنا وندير install للـ dependencies
+
+      - name: 🧪 Run tests
+        run: mvn test
+        # نشغل الاختبارات باش نتاكد الكود خدام
+
+      - name: ✅ Done!
+        run: echo "✅ CI succeeded"
+        # مجرد رسالة تأكيد بأن CI داز بنجاح
